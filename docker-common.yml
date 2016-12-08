@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+    engine:
+        build: ./engine/
+        image: ${REGISTRY}/wordpress.skeleton
+        container_name: ${SITE_KEY}
+        volumes:
+            - ./wordpress/:/var/www/html/:rw
+
+    database:
+        image: mariadb
+        container_name: ${SITE_KEY}.database
+        volumes:
+            - database:/var/lib/mysql
+            - ./data/:/docker-entrypoint-initdb.d/

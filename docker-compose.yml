@@ -1,0 +1,44 @@
+version: '2'
+
+services:
+    engine:
+        extends:
+            file: ${SERVICES_COMMON}
+            service: engine
+        environment:
+            - VIRTUAL_HOST=${SITE_KEY}.devel
+            - WORDPRESS_DB_NAME=${DEV_DB_NAME}
+            - WORDPRESS_DB_USER=${DEV_DB_USER}
+            - WORDPRESS_DB_PASSWORD=${DEV_DB_PASSWD}
+            - WORDPRESS_TABLE_PREFIX=${DEV_DB_PREFIX}
+            - WORDPRESS_AUTH_KEY=${DEV_WP_AUTH_KEY}
+            - WORDPRESS_SECURE_AUTH_KEY=${DEV_WP_SECURE_AUTH_KEY}
+            - WORDPRESS_LOGGED_IN_KEY=${DEV_WP_LOGGED_IN_KEY}
+            - WORDPRESS_NONCE_KEY=${DEV_WP_NONCE_KEY}
+            - WORDPRESS_AUTH_SALT=${DEV_WP_AUTH_SALT}
+            - WORDPRESS_SECURE_AUTH_SALT=${DEV_WP_SECURE_AUTH_SALT}
+            - WORDPRESS_LOGGED_IN_SALT=${DEV_WP_LOGGED_IN_SALT}
+            - WORDPRESS_NONCE_SALT=${DEV_WP_NONCE_SALT}
+        links:
+            - database:mysql
+        depends_on:
+            - database
+
+    database:
+        extends:
+            file: ${SERVICES_COMMON}
+            service: database
+        environment:
+            - MYSQL_ROOT_PASSWORD=${DEV_DB_ROOT_PASSWD}
+            - MYSQL_DATABASE=${DEV_DB_NAME}
+            - MYSQL_USER=${DEV_DB_USER}
+            - MYSQL_PASSWORD=${DEV_DB_PASSWD}
+
+volumes:
+    engine: {}
+    database: {}
+
+networks:
+    default:
+        external:
+            name: ${DEV_NETWORK}
